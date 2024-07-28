@@ -54,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         budgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ExpenseCategoryManagementActivity.class);
+                Intent intent = new Intent(HomeActivity.this, BudgetPlanActivity.class);
                 startActivity(intent);
             }
         });
@@ -71,7 +71,8 @@ public class HomeActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle add button click
+                Intent intent = new Intent(HomeActivity.this, EnterExpenseActivity.class);
+                startActivity(intent);
             }
         });
 
