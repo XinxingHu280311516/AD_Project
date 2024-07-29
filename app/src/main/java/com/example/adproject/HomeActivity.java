@@ -68,6 +68,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle financial button click
+                Intent intent = new Intent(HomeActivity.this, PersonalizedRecommendationsActivity.class);
+                startActivity(intent);
             }
         });
 
