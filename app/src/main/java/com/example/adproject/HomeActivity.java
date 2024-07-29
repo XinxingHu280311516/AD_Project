@@ -31,6 +31,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle view report button click
+                Intent intent = new Intent(HomeActivity.this, DashboardActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -39,6 +41,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle view button click
+                Intent intent = new Intent(HomeActivity.this, ExpenseReportActivity.class);
+                startActivity(intent);
             }
         });
 
