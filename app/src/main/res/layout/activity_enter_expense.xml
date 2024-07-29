@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="16dp"
+    tools:context=".EnterExpenseActivity">
+
+    <!-- 标题栏 -->
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/red_color"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ExpenseTrack"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/image11"
+            android:drawablePadding="8dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image10"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Logout" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bar"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Enter Expense -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Expense"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AMOUNT:"
+                android:textSize="16sp"
+                android:gravity="left" />
+
+            <EditText
+                android:id="@+id/amount_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Amount"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_background" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="category:"
+                android:textSize="16sp"
+                android:gravity="left" />
+
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_background" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DATA:"
+                android:textSize="16sp"
+                android:gravity="left" />
+
+            <Spinner
+                android:id="@+id/date_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_background" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NOTE:"
+                android:textSize="16sp"
+                android:gravity="left" />
+
+            <EditText
+                android:id="@+id/notes_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter notes"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_background" />
+
+            <Button
+                android:id="@+id/save_expense_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save Expense"
+                android:backgroundTint="@color/red_color"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
