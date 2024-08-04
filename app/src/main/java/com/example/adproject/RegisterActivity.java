@@ -1,6 +1,5 @@
 package com.example.adproject;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +9,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.LocalDate;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText nameEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     private Button registerButton;
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password);
         confirmPasswordEditText = findViewById(R.id.confirm_password);
         registerButton = findViewById(R.id.register_button);
+        apiService = ApiClient.getApiService();
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (!password.equals(confirmPassword)) {
                     Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Perform registration operation
+                    register(name, email, password);
                 }
             }
         });
@@ -52,5 +59,38 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void register(String name, String email, String password) {
+        User user = new User();
+        user.setUsername(name); // Assuming username is email for this case
+        user.setPassword(password);
+        user.setEmail(email); // Assuming the User model has an email field
+        user.setRole(1); // Setting default role
+        user.setCreated_at(LocalDate.now()); // Setting created_at to current date
+
+        Call<String> call = apiService.register(user);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                    navigateToLogin();
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Username already in use", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

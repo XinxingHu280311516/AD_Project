@@ -39,6 +39,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.mpandroidchart)
     implementation(libs.mysql.connector.java)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
