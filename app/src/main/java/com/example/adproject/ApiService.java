@@ -43,4 +43,13 @@ public interface ApiService {
 
     @DELETE("budget/delete/{catId}")
     Call<Void> deleteCategory(@Path("catId") int catId);
+
+    @GET("/Admin/transaction_user/{userId}")
+    Call<List<Transaction>> getTransactionByUserId(@Path("userId") Integer userId);
+
+    @DELETE("/Admin/delete/{id}")
+    Call<Void> deleteTransaction(@Path("id") Integer id);
+
+    @PUT("/Admin/update/{id}")
+    Call<Transaction> updateTransaction(@Path("id") Integer id, @Body Transaction transaction);
 }
