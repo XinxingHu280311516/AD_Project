@@ -11,6 +11,7 @@ mpandroidchart = "v3.1.0"
 mysqlConnectorJava = "8.0.33"
 retrofit = "2.11.0"
 converterGson = "2.11.0"
+loggingInterceptor = "5.0.0-alpha.14"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,6 +25,7 @@ mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", versio
 mysql-connector-java = { group = "mysql", name = "mysql-connector-java", version.ref = "mysqlConnectorJava" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

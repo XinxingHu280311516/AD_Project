@@ -22,6 +22,8 @@ public class HomeActivity extends AppCompatActivity {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, UploadImageActivity.class);
+                startActivity(intent);
                 // Handle capture button click
             }
         });

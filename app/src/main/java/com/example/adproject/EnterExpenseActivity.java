@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class EnterExpenseActivity extends AppCompatActivity {
 
     private EditText amountEditText;
@@ -24,6 +28,8 @@ public class EnterExpenseActivity extends AppCompatActivity {
     private Spinner dateSpinner;
     private EditText notesEditText;
     private Button saveExpenseButton;
+    private ApiService apiService;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +45,63 @@ public class EnterExpenseActivity extends AppCompatActivity {
         // 初始化日期下拉框
         initializeDateSpinner();
 
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String amount = intent.getStringExtra("amount");
+            String category = intent.getStringExtra("category");
+            String date = intent.getStringExtra("date");
+            String notes = intent.getStringExtra("notes");
+            userId = intent.getIntExtra("userId", -1);
+
+            amountEditText.setText(amount);
+            notesEditText.setText(notes);
+
+            // 动态加载用户类别
+            loadUserCategories(category);
+
+            // 设置dateSpinner的选择
+            ArrayAdapter<String> dateAdapter = (ArrayAdapter<String>) dateSpinner.getAdapter();
+            if (date != null) {
+                int datePosition = dateAdapter.getPosition(date);
+                dateSpinner.setSelection(datePosition);
+            }
+        }
+
+
         saveExpenseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveExpense();
+            }
+        });
+    }
+
+    private void loadUserCategories(String selectedCategory) {
+        Call<List<String>> call = apiService.getUserCategories(userId);
+        call.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                if (response.isSuccessful()) {
+                    List<String> categories = response.body();
+                    if (categories != null) {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categories);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        categorySpinner.setAdapter(adapter);
+
+                        if (selectedCategory != null) {
+                            int spinnerPosition = adapter.getPosition(selectedCategory);
+                            categorySpinner.setSelection(spinnerPosition);
+                        }
+                    }
+                } else {
+                    Toast.makeText(EnterExpenseActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }
