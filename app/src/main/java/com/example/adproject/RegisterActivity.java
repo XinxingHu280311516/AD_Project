@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         user.setRole(1); // Setting default role
         user.setCreated_at(LocalDate.now()); // Setting created_at to current date
 
-        Call<String> call = apiService.register(user);
+        Call<String> call = apiService. register(user);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
