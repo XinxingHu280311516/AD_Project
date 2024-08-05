@@ -89,7 +89,7 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
     }
 
     private void addCategory(String categoryName, String amount) {
-        Category category = new Category();
+        Category category = new Category(category);
         category.setName(categoryName);
         category.setBudget(Double.parseDouble(amount));
         category.setUser(new User(userId)); // Assuming you have a User constructor that accepts an ID

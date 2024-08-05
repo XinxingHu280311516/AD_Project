@@ -58,5 +58,7 @@ public class Category {
         this.budget = amount;
     }
 
-    public Category() {}
+    public Category(String category) {}
+
+    public Category(){}
 }

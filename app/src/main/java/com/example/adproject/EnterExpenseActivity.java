@@ -1,6 +1,5 @@
 package com.example.adproject;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -41,10 +42,10 @@ public class EnterExpenseActivity extends AppCompatActivity {
         dateSpinner = findViewById(R.id.date_spinner);
         notesEditText = findViewById(R.id.notes_edit_text);
         saveExpenseButton = findViewById(R.id.save_expense_button);
+        apiService = ApiClient.getApiService();
 
         // 初始化日期下拉框
         initializeDateSpinner();
-
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -68,7 +69,6 @@ public class EnterExpenseActivity extends AppCompatActivity {
             }
         }
 
-
         saveExpenseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,14 +78,18 @@ public class EnterExpenseActivity extends AppCompatActivity {
     }
 
     private void loadUserCategories(String selectedCategory) {
-        Call<List<String>> call = apiService.getUserCategories(userId);
-        call.enqueue(new Callback<List<String>>() {
+        Call<List<Category>> call = apiService.getUserCategories(userId);
+        call.enqueue(new Callback<List<Category>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {
-                    List<String> categories = response.body();
+                    List<Category> categories = response.body();
                     if (categories != null) {
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categories);
+                        List<String> categoryNames = new ArrayList<>();
+                        for (Category category : categories) {
+                            categoryNames.add(category.getName());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categoryNames);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         categorySpinner.setAdapter(adapter);
 
@@ -100,7 +104,7 @@ public class EnterExpenseActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(Call<List<Category>> call, Throwable t) {
                 Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -151,9 +155,33 @@ public class EnterExpenseActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
         } else {
             // 保存费用记录逻辑（例如保存到数据库或显示Toast消息）
-            Toast.makeText(this, "Expense saved: " + amount + ", " + category + ", " + date + ", " + notes, Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(EnterExpenseActivity.this, HomeActivity.class);
-            startActivity(intent);
+            Transaction transaction = new Transaction();
+            transaction.setAmount(Double.parseDouble(amount));
+            transaction.setDescription(notes);
+            transaction.setCreated_at(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            transaction.setCategory(new Category());
+            transaction.getCategory().setName(category);
+            transaction.setUser(new User());
+            transaction.getUser().setId(userId);
+
+            Call<Transaction> call = apiService.addTransaction(transaction, userId);
+            call.enqueue(new Callback<Transaction>() {
+                @Override
+                public void onResponse(Call<Transaction> call, Response<Transaction> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(EnterExpenseActivity.this, "Expense saved: " + amount + ", " + category + ", " + date + ", " + notes, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(EnterExpenseActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(EnterExpenseActivity.this, "Failed to save expense", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Transaction> call, Throwable t) {
+                    Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
