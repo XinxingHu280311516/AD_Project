@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 //
 //    private void login(String email, String password) {
 //        User user = new User();
-//        user.setUsername(email); // Assuming username is the same as email for this example
+//        user.setEmail(email); // Assuming username is the same as email for this example
 //        user.setPassword(password);
 //
 //        Call<User> call = apiService.login(user);

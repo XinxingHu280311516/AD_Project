@@ -77,5 +77,11 @@ public class User {
         this.transactions = transactions;
     }
 
+    public User(){}
+
+    public User(Integer ID){
+        id = ID;
+    }
+
 
 }

@@ -6,9 +6,11 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -25,5 +27,20 @@ public interface ApiService {
     Call<String> uploadImage(@Part MultipartBody.Part file, @Part("description") RequestBody description);
 
     @GET("categories/{userId}")
-    Call<List<String>> getUserCategories(@Path("userId") int userId);
+    Call<List<Category>> getUserCategories(@Path("userId") int userId);
+
+    //@GET("categories/{userId}")
+    //Call<List<String>> getUserCategories(@Path("userId") int userId);
+
+    @POST("transaction/add/{userId}")
+    Call<Transaction> addTransaction(@Body Transaction transaction, @Path("userId") int userId);
+
+    @POST("budget/add/{userId}")
+    Call<Category> addCategory(@Body Category category, @Path("userId") int userId);
+
+    @PUT("budget/update/{catId}")
+    Call<Category> updateCategory(@Body Category category, @Path("catId") int catId);
+
+    @DELETE("budget/delete/{catId}")
+    Call<Void> deleteCategory(@Path("catId") int catId);
 }

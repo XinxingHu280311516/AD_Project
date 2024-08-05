@@ -94,8 +94,8 @@
                 android:id="@+id/save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save"
                 android:backgroundTint="@color/red_color"
+                android:text="Save"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
     </ScrollView>
