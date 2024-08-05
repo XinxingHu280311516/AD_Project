@@ -6,9 +6,11 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -26,4 +28,13 @@ public interface ApiService {
 
     @GET("categories/{userId}")
     Call<List<String>> getUserCategories(@Path("userId") int userId);
+
+    @GET("/Admin/transaction_user/{userId}")
+    Call<List<Transaction>> getTransactionByUserId(@Path("userId") Integer userId);
+
+    @DELETE("/Admin/delete/{id}")
+    Call<Void> deleteTransaction(@Path("id") Integer id);
+
+    @PUT("/Admin/update/{id}")
+    Call<Transaction> updateTransaction(@Path("id") Integer id, @Body Transaction transaction);
 }

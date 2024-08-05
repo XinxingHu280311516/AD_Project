@@ -53,6 +53,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle view by date button click
+                Intent intent = new Intent(HomeActivity.this, ViewByDateActivity.class);
+                startActivity(intent);
             }
         });
 

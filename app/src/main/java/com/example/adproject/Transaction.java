@@ -68,4 +68,8 @@ public class Transaction {
     }
 
     public Transaction() {}
+
+    public String getCategoryName() {
+        return category != null ? category.getName() : "No Category";
+    }
 }
