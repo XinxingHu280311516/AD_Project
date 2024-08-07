@@ -43,6 +43,9 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".BudgetPlanActivity"
+            android:exported="false" />
+        <activity
             android:name=".EnterExpenseActivity"
             android:exported="false"/>
         <activity

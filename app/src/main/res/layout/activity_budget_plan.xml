@@ -86,34 +86,84 @@
                     android:layout_marginTop="4dp" />
             </RelativeLayout>
 
-            <!-- Budget Categories -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Budget Categories"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
 
-            <LinearLayout
-                android:id="@+id/categories_list"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="16dp">
+                android:layout_height="match_parent"
+                android:layout_below="@id/title_bar"
+                android:padding="16dp">
 
-                <!-- 动态添加预算类别项 -->
+                <LinearLayout
+                    android:id="@+id/content_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <!-- Existing Categories -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Budget Categories"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/add_new_budget_plan_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add New Budget Plan"
-                android:backgroundTint="@color/red_color"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="16dp" />
+                    <!-- Existing Categories List -->
+                    <LinearLayout
+                        android:id="@+id/categories_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <!-- 现有的类别项可以在这里定义，示例中省略 -->
+
+                    </LinearLayout>
+
+                    <!-- Add New Budget Plan -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add New Budget Plan"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <EditText
+                        android:id="@+id/category_name_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter category name"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/edit_text_background" />
+
+                    <EditText
+                        android:id="@+id/amount_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter amount"
+                        android:layout_marginBottom="16dp"
+                        android:inputType="numberDecimal"
+                        android:background="@drawable/edit_text_background" />
+
+                    <Button
+                        android:id="@+id/add_category_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Add Category"
+                        android:backgroundTint="@color/red_color"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/save_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/red_color"
+                        android:text="Save"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+            </ScrollView>
+
         </LinearLayout>
     </ScrollView>
 
