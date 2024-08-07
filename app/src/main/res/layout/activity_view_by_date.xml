@@ -30,7 +30,7 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+    </RelativeLayout> 
 
     <!-- 日期选择器 -->
     <DatePicker

@@ -1,6 +1,7 @@
 package com.example.adproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +54,9 @@ public class EnterExpenseActivity extends AppCompatActivity {
             String category = intent.getStringExtra("category");
             String date = intent.getStringExtra("date");
             String notes = intent.getStringExtra("notes");
-            userId = intent.getIntExtra("userId", -1);
+            SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);
+            userId = pref.getInt("UserId", -1);
+
 
             amountEditText.setText(amount);
             notesEditText.setText(notes);
@@ -77,25 +80,65 @@ public class EnterExpenseActivity extends AppCompatActivity {
         });
     }
 
-    private void loadUserCategories(String selectedCategory) {
+//    private void loadUserCategories(String selectedCategory) {
+//        Call<List<Category>> call = apiService.getUserCategories(userId);
+//        call.enqueue(new Callback<List<Category>>() {
+//            @Override
+//            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+//                if (response.isSuccessful()) {
+//                    List<Category> categories = response.body();
+//                    System.out.println(categories);
+//                    if (categories != null) {
+//                        List<String> categoryNames = new ArrayList<>();
+//                        for (Category category : categories) {
+//                            categoryNames.add(category.getName());
+//                        }
+//                        ArrayAdapter<String> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categoryNames);
+//                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                        categorySpinner.setAdapter(adapter);
+//
+//                        if (selectedCategory != null) {
+//                            int spinnerPosition = adapter.getPosition(selectedCategory);
+//                            categorySpinner.setSelection(spinnerPosition);
+//                        }
+//                    }
+//                } else {
+//                    Toast.makeText(EnterExpenseActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Category>> call, Throwable t) {
+//                Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
+    private void loadUserCategories(String selectedCategoryName) {
         Call<List<Category>> call = apiService.getUserCategories(userId);
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {
                     List<Category> categories = response.body();
+
                     if (categories != null) {
-                        List<String> categoryNames = new ArrayList<>();
-                        for (Category category : categories) {
-                            categoryNames.add(category.getName());
-                        }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categoryNames);
+                        ArrayAdapter<Category> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categories);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         categorySpinner.setAdapter(adapter);
 
-                        if (selectedCategory != null) {
-                            int spinnerPosition = adapter.getPosition(selectedCategory);
-                            categorySpinner.setSelection(spinnerPosition);
+                        if (selectedCategoryName != null) {
+                            int spinnerPosition = -1;
+                            for (int i = 0; i < categories.size(); i++) {
+                                if (categories.get(i).getName().equals(selectedCategoryName)) {
+                                    spinnerPosition = i;
+                                    break;
+                                }
+                            }
+
+                            if (spinnerPosition >= 0) {
+                                categorySpinner.setSelection(spinnerPosition);
+                            }
                         }
                     }
                 } else {
@@ -109,6 +152,8 @@ public class EnterExpenseActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void initializeDateSpinner() {
         List<String> dateList = generateDateList();
@@ -147,11 +192,13 @@ public class EnterExpenseActivity extends AppCompatActivity {
 
     private void saveExpense() {
         String amount = amountEditText.getText().toString().trim();
-        String category = categorySpinner.getSelectedItem().toString();
-        String date = dateSpinner.getSelectedItem().toString();
+        Category category = (Category)categorySpinner.getSelectedItem();
+//        String date = dateSpinner.getSelectedItem().toString();
+        String date = dateSpinner.getSelectedItem().toString().split("T")[0];
+        //System.out.println(date);
         String notes = notesEditText.getText().toString().trim();
 
-        if (amount.isEmpty() || category.isEmpty() || date.isEmpty()) {
+        if (amount.isEmpty() || category==null || date.isEmpty()) {
             Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
         } else {
             // 保存费用记录逻辑（例如保存到数据库或显示Toast消息）
@@ -159,26 +206,35 @@ public class EnterExpenseActivity extends AppCompatActivity {
             transaction.setAmount(Double.parseDouble(amount));
             transaction.setDescription(notes);
             transaction.setCreated_at(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            //transaction.setUpdated_at(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             transaction.setCategory(new Category());
-            transaction.getCategory().setName(category);
+            transaction.setCategory(category);
             transaction.setUser(new User());
             transaction.getUser().setId(userId);
+
+            System.out.println(transaction.getCategory().getId());
 
             Call<Transaction> call = apiService.addTransaction(transaction, userId);
             call.enqueue(new Callback<Transaction>() {
                 @Override
                 public void onResponse(Call<Transaction> call, Response<Transaction> response) {
                     if (response.isSuccessful()) {
+                        System.out.println(response.code());
                         Toast.makeText(EnterExpenseActivity.this, "Expense saved: " + amount + ", " + category + ", " + date + ", " + notes, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(EnterExpenseActivity.this, HomeActivity.class);
                         startActivity(intent);
                     } else {
+                        System.out.println(response.code());
                         Toast.makeText(EnterExpenseActivity.this, "Failed to save expense", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Transaction> call, Throwable t) {
+                    System.out.println(t.getMessage());
+//                    Toast.makeText(EnterExpenseActivity.this, "Expense saved: " + amount + ", " + category + ", " + date + ", " + notes, Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(EnterExpenseActivity.this, HomeActivity.class);
+//                    startActivity(intent);
                     Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
                 }
             });

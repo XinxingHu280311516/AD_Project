@@ -1,13 +1,14 @@
 package com.example.adproject;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Transaction {
     private Integer id;
     private double amount;
     private String description;
     private LocalDate created_at;
-    private LocalDate updated_at;
+    private LocalDateTime updated_at;
     private Category category;
     private User user;
 
@@ -43,11 +44,11 @@ public class Transaction {
         this.created_at = created_at;
     }
 
-    public LocalDate getUpdated_at() {
+    public LocalDateTime getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(LocalDate updated_at) {
+    public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
 

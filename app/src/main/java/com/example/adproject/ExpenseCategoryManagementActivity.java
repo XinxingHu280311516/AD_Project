@@ -2,6 +2,7 @@ package com.example.adproject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +38,9 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
         apiService = ApiClient.getApiService();
 
         // Retrieve userId from Intent or SharedPreferences
-        userId = getIntent().getIntExtra("userId", -1);
+        SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);
+        userId = pref.getInt("UserId", -1);
+
 
         // Load existing categories
         loadCategories();
@@ -68,8 +71,28 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
     }
 
     private void loadCategories() {
-        Call<List<Category>> call = apiService.getUserCategories(userId);
-        call.enqueue(new Callback<List<Category>>() {
+//        Call<List<Category>> call = apiService.getUserCategories(userId);
+//        call.enqueue(new Callback<List<Category>>() {
+//            @Override
+//            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    for (Category category : response.body()) {
+//                        addCategoryToList(category);
+//                    }
+//                } else {
+//                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Category>> call, Throwable t) {
+//                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+        // Load system categories
+        Call<List<Category>> systemCategoriesCall = apiService.getCategoriesByType(0);
+        systemCategoriesCall.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -77,7 +100,7 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
                         addCategoryToList(category);
                     }
                 } else {
-                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load system categories", Toast.LENGTH_SHORT).show();
                 }
             }
 

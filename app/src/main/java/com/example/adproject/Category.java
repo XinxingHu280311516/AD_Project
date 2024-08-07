@@ -1,8 +1,11 @@
 package com.example.adproject;
 
+import org.intellij.lang.annotations.Identifier;
+
 import java.util.List;
 
 public class Category {
+
     private Integer id;
     private String name;
     private double budget;
@@ -61,4 +64,9 @@ public class Category {
     public Category(String category) {}
 
     public Category(){}
+
+    @Override
+    public String toString() {
+        return name; // 返回类别名称
+    }
 }
