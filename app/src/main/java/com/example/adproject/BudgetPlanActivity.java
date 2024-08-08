@@ -25,11 +25,15 @@ public class BudgetPlanActivity extends AppCompatActivity {
     private LinearLayout categoriesList;
     private ApiService apiService;
     private int userId; // Assuming this is passed from previous activity or retrieved from SharedPreferences
+    private TextView totalAmountTextView;
+    private TextView remainingBalanceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_plan);
+        totalAmountTextView = findViewById(R.id.total_amount);
+        remainingBalanceTextView = findViewById(R.id.remaining_balance);
 
         EditText categoryNameEditText = findViewById(R.id.category_name_edit_text);
         EditText amountEditText = findViewById(R.id.amount_edit_text);
@@ -41,6 +45,9 @@ public class BudgetPlanActivity extends AppCompatActivity {
         // Retrieve userId from Intent or SharedPreferences
         SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);
         userId = pref.getInt("UserId", -1);
+
+
+        loadTotalBudgetAndSpending();
 
         // Load existing categories
         loadCategories();
@@ -69,6 +76,46 @@ public class BudgetPlanActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void loadTotalBudgetAndSpending() {
+        Call<Double> budgetCall = apiService.getTotalBudgetByUserId(userId);
+        budgetCall.enqueue(new Callback<Double>() {
+            @Override
+            public void onResponse(Call<Double> call, Response<Double> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    double totalBudget = response.body();
+                    totalAmountTextView.setText("Total Amount: $" + totalBudget);
+
+                    Call<Double> spendingCall = apiService.getTotalSpendingCurrent(userId);
+                    spendingCall.enqueue(new Callback<Double>() {
+                        @Override
+                        public void onResponse(Call<Double> call, Response<Double> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                double totalSpending = response.body();
+                                double remainingBalance = totalBudget - totalSpending;
+                                remainingBalanceTextView.setText("Remaining Balance: $" + remainingBalance);
+                            } else {
+                                Toast.makeText(BudgetPlanActivity.this, "Failed to load total spending", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Double> call, Throwable t) {
+                            Toast.makeText(BudgetPlanActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(BudgetPlanActivity.this, "Failed to load total budget", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Double> call, Throwable t) {
+                Toast.makeText(BudgetPlanActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void loadCategories() {
         // Load user categories
@@ -171,6 +218,7 @@ public class BudgetPlanActivity extends AppCompatActivity {
             public void onResponse(Call<Category> call, Response<Category> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     addCategoryToList(response.body());
+                    loadTotalBudgetAndSpending();
                 } else {
                     Toast.makeText(BudgetPlanActivity.this, "Failed to add category", Toast.LENGTH_SHORT).show();
                 }
@@ -253,6 +301,7 @@ public class BudgetPlanActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     categoriesList.removeView(view);
+                    loadTotalBudgetAndSpending();
                 } else {
                     Toast.makeText(BudgetPlanActivity.this, "Failed to delete category", Toast.LENGTH_SHORT).show();
                 }
@@ -308,6 +357,7 @@ public class BudgetPlanActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     categoryNameTextView.setText(response.body().getName());
                     amountTextView.setText("$" + response.body().getBudget());
+                    loadTotalBudgetAndSpending();
                 } else {
                     Toast.makeText(BudgetPlanActivity.this, "Failed to update category", Toast.LENGTH_SHORT).show();
                 }

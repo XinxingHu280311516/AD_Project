@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://192.168.0.103:8080/";
+    private static final String BASE_URL = "http://10.249.71.91:8080/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance() {

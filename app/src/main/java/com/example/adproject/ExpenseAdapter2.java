@@ -1,5 +1,6 @@
 package com.example.adproject;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +36,31 @@ public class ExpenseAdapter2 extends RecyclerView.Adapter<ExpenseAdapter2.Expens
         @Override
         public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
             Transaction transaction = transactions.get(position);
-            holder.tvDate.setText(transaction.getCreated_at().toString());
-            holder.tvCategory.setText(transaction.getCategoryName());
-            holder.tvStore.setText(transaction.getDescription());
-            holder.tvAmount.setText(String.format("$%.2f", transaction.getAmount()));
-        }
+            // 添加日志以检查 transaction 和 TextView 的初始化情况
+            if (transaction == null) {
+                Log.e("ExpenseAdapter2", "Transaction is null at position: " + position);
+            } else {
+                Log.d("ExpenseAdapter2", "Transaction data: " + transaction.toString());
+            }
 
+            if (holder.tvDate == null) {
+                Log.e("ExpenseAdapter2", "TextView tvDate is null at position: " + position);
+            } else {
+                holder.tvDate.setText(transaction.getCreated_at().toString());
+            }
+
+            if (holder.tvCategory == null) {
+                Log.e("ExpenseAdapter2", "TextView tvCategory is null at position: " + position);
+            } else {
+                holder.tvCategory.setText(transaction.getCategoryName());
+            }
+
+            if (holder.tvAmount == null) {
+                Log.e("ExpenseAdapter2", "TextView tvAmount is null at position: " + position);
+            } else {
+                holder.tvAmount.setText(String.format("$%.2f", transaction.getAmount()));
+            }
+        }
         @Override
         public int getItemCount() {
             return transactions.size();

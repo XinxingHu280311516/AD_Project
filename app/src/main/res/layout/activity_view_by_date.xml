@@ -30,15 +30,28 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:layout_alignParentEnd="true" />
-    </RelativeLayout> 
+    </RelativeLayout>
 
-    <!-- 日期选择器 -->
-    <DatePicker
-        android:id="@+id/date_picker"
-        android:layout_width="wrap_content"
+    <!-- 日期选择器 和 查找按钮 -->
+    <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+
+    </LinearLayout>
 
     <!-- 消费记录 RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

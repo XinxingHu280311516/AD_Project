@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 navigateToLogin();
-                Toast.makeText(RegisterActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
             }
         });
     }

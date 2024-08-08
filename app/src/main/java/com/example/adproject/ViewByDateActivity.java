@@ -1,8 +1,14 @@
 package com.example.adproject;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +28,8 @@ public class ViewByDateActivity extends AppCompatActivity implements ExpenseAdap
     private ExpenseAdapter2 adapter;
     private List<Transaction> transactions;
     private ApiService apiService;
+    private DatePicker datePicker;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +45,28 @@ public class ViewByDateActivity extends AppCompatActivity implements ExpenseAdap
 
         apiService = ApiClient.getApiService();
 
-        DatePicker datePicker = findViewById(R.id.date_picker);
-        datePicker.init(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
-                    LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-                    filterExpensesByDate(selectedDate);
-                });
+        datePicker = findViewById(R.id.date_picker);
+
+        SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);
+        userId = pref.getInt("UserId", -1);
+
+        Button btnSearch = findViewById(R.id.btn_search);
+
+        btnSearch.setOnClickListener(v -> {
+            int year = datePicker.getYear();
+            int month = datePicker.getMonth();
+            int day = datePicker.getDayOfMonth();
+            LocalDate selectedDate = LocalDate.of(year, month+1, day);
+            System.out.println(selectedDate);
+            filterExpensesByDate(selectedDate);
+        });
     }
 
-private void filterExpensesByDate(LocalDate date) {
+
+    private void filterExpensesByDate(LocalDate date) {
     // 根据选定的日期过滤消费记录并更新 RecyclerView
-    apiService.getTransactionByUserId(1).enqueue(new Callback<List<Transaction>>() {
+        System.out.println(userId);
+        apiService.getTransactionByUserId(userId).enqueue(new Callback<List<Transaction>>() {
         @Override
         public void onResponse(Call<List<Transaction>> call, Response<List<Transaction>> response) {
             if (response.isSuccessful()) {
@@ -70,17 +89,69 @@ private void filterExpensesByDate(LocalDate date) {
     });
 }
 
-@Override
-public void onEditClick(int position) {
-    // 处理编辑按钮点击事件
-    Transaction transaction = transactions.get(position);
-    // 实现修改逻辑，例如显示一个对话框以修改交易记录
-}
+    @Override
+    public void onEditClick(int position) {
+        // 获取要编辑的交易记录
+        Transaction transaction = transactions.get(position);
 
+        // 创建并显示编辑对话框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_edit_transaction, null);
+        builder.setView(dialogView);
+
+        EditText editAmount = dialogView.findViewById(R.id.edit_amount);
+        EditText editDescription = dialogView.findViewById(R.id.edit_description);
+
+        // 预填充当前交易记录的详细信息
+        editAmount.setText(String.valueOf(transaction.getAmount()));
+        editDescription.setText(transaction.getDescription());
+
+        builder.setPositiveButton("Save", null);
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // 覆盖保存按钮点击事件
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String newAmount = editAmount.getText().toString().trim();
+            String newDescription = editDescription.getText().toString().trim();
+
+            if (newAmount.isEmpty() || newDescription.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            } else {
+                // 更新交易记录
+                transaction.setAmount(Double.parseDouble(newAmount));
+                transaction.setDescription(newDescription);
+
+                // 调用 API 更新交易记录
+                apiService.updateTransaction(transaction,transaction.getId()).enqueue(new Callback<Transaction>() {
+                    @Override
+                    public void onResponse(Call<Transaction> call, Response<Transaction> response) {
+                        if (response.isSuccessful()) {
+                            transactions.set(position, response.body());
+                            adapter.notifyItemChanged(position);
+                            dialog.dismiss();
+                            Toast.makeText(ViewByDateActivity.this, "Transaction updated successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ViewByDateActivity.this, "Failed to update transaction", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Transaction> call, Throwable t) {
+                        Toast.makeText(ViewByDateActivity.this, "Network request failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
 @Override
 public void onDeleteClick(int position) {
     // 处理删除按钮点击事件
     int transactionId = transactions.get(position).getId();
+    System.out.println(transactionId);
     apiService.deleteTransaction(transactionId).enqueue(new Callback<Void>() {
         @Override
         public void onResponse(Call<Void> call, Response<Void> response) {

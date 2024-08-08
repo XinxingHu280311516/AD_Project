@@ -10,10 +10,10 @@ import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
-    private List<Expense> expenseList;
+    private List<Transaction> transactionList;
 
-    public ExpenseAdapter(List<Expense> expenseList) {
-        this.expenseList = expenseList;
+    public ExpenseAdapter(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 
     @NonNull
@@ -25,30 +25,30 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
-        Expense expense = expenseList.get(position);
-        holder.dateTextView.setText(expense.getDate());
-        holder.categoryTextView.setText(expense.getCategory());
-        holder.subCategoryTextView.setText(expense.getSubCategory());
-        holder.amountTextView.setText("$" + String.format("%.2f", expense.getAmount()));
+        Transaction transaction = transactionList.get(position);
+        holder.dateTextView.setText(transaction.getCreated_at().toString());
+        holder.categoryTextView.setText(transaction.getCategory().getName());
+        holder.descriptionTextView.setText(transaction.getDescription());
+        holder.amountTextView.setText("$" + String.format("%.2f", transaction.getAmount()));
     }
 
     @Override
     public int getItemCount() {
-        return expenseList.size();
+        return transactionList.size();
     }
 
     static class ExpenseViewHolder extends RecyclerView.ViewHolder {
 
         TextView dateTextView;
         TextView categoryTextView;
-        TextView subCategoryTextView;
+        TextView descriptionTextView;
         TextView amountTextView;
 
         public ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
             dateTextView = itemView.findViewById(R.id.date_text_view);
             categoryTextView = itemView.findViewById(R.id.category_text_view);
-            subCategoryTextView = itemView.findViewById(R.id.sub_category_text_view);
+            descriptionTextView = itemView.findViewById(R.id.description_text_view);
             amountTextView = itemView.findViewById(R.id.amount_text_view);
         }
     }

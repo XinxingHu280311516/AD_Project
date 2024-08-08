@@ -1,6 +1,7 @@
 package com.example.adproject;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -43,8 +44,8 @@ public interface ApiService {
     @GET("User/budget/{userId}")
     Call<Double> getUserCurrentMouth(@Path("userId") int userId);
 
-    @GET("User/category-spending/{userId}")
-    Call<List<Object[]>> getTotalSpendingByCategoryForCurrentMonth(@Path("userId") Integer userId);
+//    @GET("User/category-spending/{userId}")
+//    Call<List<Object[]>> getTotalSpendingByCategoryForCurrentMonth(@Path("userId") Integer userId);
 
     @DELETE("User/budget/delete/{catId}")
     Call<Void> deleteCategory(@Path("catId") int catId);
@@ -52,15 +53,24 @@ public interface ApiService {
     @GET("/Admin/transaction_user/{userId}")
     Call<List<Transaction>> getTransactionByUserId(@Path("userId") Integer userId);
 
-    @GET("User//category/{id}")
+    @GET("User/category/{id}")
     Call<Category> getCategoryById(@Path("id") Integer id);
 
-    @DELETE("/Admin/delete/{id}")
-    Call<Void> deleteTransaction(@Path("id") Integer id);
+    @DELETE("/User/transaction/delete/{transId}")
+    Call<Void> deleteTransaction(@Path("transId") Integer id);
 
-    @PUT("/Admin/update/{id}")
-    Call<Transaction> updateTransaction(@Path("id") Integer id, @Body Transaction transaction);
+    @PUT("User/transaction/update/{transId}")
+    Call<Transaction> updateTransaction(@Body Transaction transaction, @Path("transId") Integer id);
 
     @GET("Admin/categories/{type}")
     Call<List<Category>> getCategoriesByType(@Path("type") int type);
+
+    @GET("User/categories/total-budget/{userId}")
+    Call<Double> getTotalBudgetByUserId(@Path("userId") Integer userId);
+
+    @GET("User/total-spending-current/{userId}")
+    Call<Double> getTotalSpendingCurrent(@Path("userId") Integer userId);
+
+    @GET("User/total-spending-current-mouth-by-category/{userId}")
+    Call<List<Map<String, Object>>> getTotalSpendingByCategoryForCurrentMonth(@Path("userId") Integer userId);
 }

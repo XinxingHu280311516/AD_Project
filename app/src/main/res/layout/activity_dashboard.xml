@@ -163,35 +163,33 @@
                     android:layout_marginBottom="8dp" />
 
                 <TextView
-                    android:id="@+id/groceries_expense"
+                    android:id="@+id/top_expenses_title_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Groceries - $1,200"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:layout_below="@id/top_expenses_title"
                     android:layout_marginTop="8dp" />
 
                 <TextView
-                    android:id="@+id/rent_expense"
+                    android:id="@+id/top_expenses_title_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rent - $1,000"
-                    android:layout_below="@id/groceries_expense"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_below="@id/top_expenses_title_1"
                     android:layout_marginTop="8dp" />
 
                 <TextView
-                    android:id="@+id/utilities_expense"
+                    android:id="@+id/top_expenses_title_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Utilities - $300"
-                    android:layout_below="@id/rent_expense"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:id="@+id/transportation_expense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Transportation - $200"
-                    android:layout_below="@id/utilities_expense"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_below="@id/top_expenses_title_2"
                     android:layout_marginTop="8dp" />
             </RelativeLayout>
 
@@ -201,33 +199,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Enter Expense"
-                    android:backgroundTint="@color/red_color"
-                    android:textColor="#FFFFFF"
-                    android:layout_margin="4dp" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Expense Report"
-                    android:backgroundTint="@color/red_color"
-                    android:textColor="#FFFFFF"
-                    android:layout_margin="4dp" />
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Budget Plan"
-                    android:backgroundTint="@color/red_color"
-                    android:textColor="#FFFFFF"
-                    android:layout_margin="4dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
