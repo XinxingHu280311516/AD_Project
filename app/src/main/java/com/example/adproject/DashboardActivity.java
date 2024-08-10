@@ -31,7 +31,7 @@ public class DashboardActivity extends AppCompatActivity {
     private ApiService apiService;
     private Integer userId;
     private TextView totalExpensesAmount,budgetProgressPercentage;
-    private double totalBudget = 0.0;
+    private double totalBudget;
     private TextView topExpensesTitle1, topExpensesTitle2,  topExpensesTitle3;
 
     @Override
@@ -63,23 +63,33 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void fetchDashboardData() {
-        fetchTotalBudget();
-        fetchTotalSpendingByCategory();
+        totalBudget = 0; // 每次调用时将 totalBudget 重置为 0
+        fetchTotalBudget(new BudgetFetchCallback() {
+            @Override
+            public void onBudgetFetched() {
+                fetchTotalSpendingByCategory();
+            }
+        });
     }
 
-    private void fetchTotalBudget() {
+    private interface BudgetFetchCallback {
+        void onBudgetFetched();
+    }
+
+    private void fetchTotalBudget(BudgetFetchCallback callback) {
         Call<List<Category>> call = apiService.getUserCategories(userId);
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Category> categories = response.body();
-                    //double totalBudget = 0.0;
                     for (Category category : categories) {
                         totalBudget += category.getBudget();
                     }
-                    System.out.println(totalBudget);
-                    updateBudgetProgress(totalBudget);
+                    if (callback != null) {
+                        callback.onBudgetFetched();
+                    }
+                    //updateBudgetProgress(totalBudget);
                 } else {
                     Toast.makeText(DashboardActivity.this, "Failed to load total budget", Toast.LENGTH_SHORT).show();
                 }
@@ -94,9 +104,12 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void updateBudgetProgress(double totalExpenses) {
         int progress = (int) ((totalExpenses / totalBudget) * 100);
+        System.out.println("UP:"+totalBudget);
+//        System.out.println("UP1:"+progress);
         budgetProgressBar.setProgress(progress);
         budgetProgressPercentage.setText(progress + "%");
         totalExpensesAmount.setText(String.format("$%.2f", totalExpenses));
+
     }
 
 
@@ -108,7 +121,7 @@ public class DashboardActivity extends AppCompatActivity {
                 total += spendingAmount.doubleValue();
             }
         }
-        System.out.println(total);
+        //System.out.println(total);
         return total;
     }
 
@@ -120,9 +133,12 @@ public class DashboardActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Map<String, Object>> totalSpendingByCategory = response.body();
                     setupPieChart(totalSpendingByCategory);
+
                     double totalExpenses = calculateTotalExpenses(totalSpendingByCategory);
+                    System.out.println("totalBud:"+totalBudget);
                     updateBudgetProgress(totalExpenses);
                     totalExpensesAmount.setText(String.format("$%.2f", totalExpenses));
+                    System.out.println(String.format("$%.2f", totalExpenses));
                     updateTopExpenses(totalSpendingByCategory);
                 } else {
                     Toast.makeText(DashboardActivity.this, "Failed to load total spending by category", Toast.LENGTH_SHORT).show();

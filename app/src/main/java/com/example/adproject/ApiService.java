@@ -73,4 +73,7 @@ public interface ApiService {
 
     @GET("User/total-spending-current-mouth-by-category/{userId}")
     Call<List<Map<String, Object>>> getTotalSpendingByCategoryForCurrentMonth(@Path("userId") Integer userId);
+
+    @GET("/jky/Tips/{userId}")
+    Call<List<Map<String, String>>> getBudgetAdjustmentTips(@Path("userId") int userId);
 }

@@ -99,6 +99,7 @@ public class ExpenseReportActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Map<String, Object>> totalSpendingByCategory = response.body();
                     setupPieChart(totalSpendingByCategory);
+                    //System.out.println("res"+totalSpendingByCategory);
                     double totalExpenses = calculateTotalExpenses(totalSpendingByCategory);
                     totalExpensesAmount.setText(String.format("$%.2f", totalExpenses));
                 } else {
@@ -138,8 +139,8 @@ public class ExpenseReportActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Category category = response.body();
                     if (category != null) {
-                        System.out.println(totalSpending.floatValue());
-                        System.out.println(category.getName());
+                        //System.out.println(totalSpending.floatValue());
+                        //System.out.println(category.getName());
                         entries.add(new PieEntry(totalSpending.floatValue(), category.getName()));
                     }
                 } else {
