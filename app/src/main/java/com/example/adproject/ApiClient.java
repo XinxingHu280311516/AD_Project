@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://192.168.0.103:8080/";
+    private static final String BASE_URL = "http://10.249.71.91:8080/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance() {
@@ -42,9 +42,13 @@ public class ApiClient {
             // 创建OkHttpClient并设置CookieJar
             OkHttpClient client = new OkHttpClient.Builder()
                     .cookieJar(cookieJar)
+                    .connectTimeout(300, java.util.concurrent.TimeUnit.SECONDS) // 连接超时
+                    .readTimeout(300, java.util.concurrent.TimeUnit.SECONDS)    // 读取超时
+                    .writeTimeout(300, java.util.concurrent.TimeUnit.SECONDS)   // 写入超时
                     .build();
 
             Gson gson = new GsonBuilder()
+                    .setLenient()
                     .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                     .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                     .create();
@@ -63,4 +67,3 @@ public class ApiClient {
         return getRetrofitInstance().create(ApiService.class);
     }
 }
-
