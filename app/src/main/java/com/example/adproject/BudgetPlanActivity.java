@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,14 @@ public class BudgetPlanActivity extends AppCompatActivity {
         EditText amountEditText = findViewById(R.id.amount_edit_text);
         Button addCategoryButton = findViewById(R.id.add_category_button);
         Button saveButton = findViewById(R.id.save_button);
+        ImageButton backButton = findViewById(R.id.back_button1);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BudgetPlanActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
         categoriesList = findViewById(R.id.categories_list);
         apiService = ApiClient.getApiService();
 
@@ -46,11 +55,16 @@ public class BudgetPlanActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);
         userId = pref.getInt("UserId", -1);
 
+        boolean isFirst = pref.getBoolean("isFirst", false);
 
         loadTotalBudgetAndSpending();
 
         // Load existing categories
         loadCategories();
+
+        if(isFirst) {
+            loadCategories1();
+        }
 
         addCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +151,10 @@ public class BudgetPlanActivity extends AppCompatActivity {
                 Toast.makeText(BudgetPlanActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+
+    private void loadCategories1() {
         // Load system categories and copy to user categories if not exist
         Call<List<Category>> systemCategoriesCall = apiService.getCategoriesByType(0);
         systemCategoriesCall.enqueue(new Callback<List<Category>>() {
@@ -303,7 +320,7 @@ public class BudgetPlanActivity extends AppCompatActivity {
                     categoriesList.removeView(view);
                     loadTotalBudgetAndSpending();
                 } else {
-                    Toast.makeText(BudgetPlanActivity.this, "Failed to delete category", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BudgetPlanActivity.this, "There are already records of using this type of consumption", Toast.LENGTH_LONG).show();
                 }
             }
 

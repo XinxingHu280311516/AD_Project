@@ -19,19 +19,19 @@
             android:id="@+id/expense_track_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ExpenseTrack"
+            android:text="SmartBook"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/logout_button"
+        <ImageButton
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/image10"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Return" />
     </RelativeLayout>
 
     <ScrollView

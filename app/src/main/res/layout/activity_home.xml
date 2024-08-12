@@ -4,30 +4,54 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- 顶部区域，包含标题和 Logout 按钮 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Welcome to"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Track expenses"
-                android:textSize="18sp"
-                android:layout_marginBottom="16dp" />
+                <!-- 标题 -->
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome SmartBook"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true" />
+
+                <!-- Logout 按钮 -->
+                <Button
+                    android:id="@+id/logout_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#FF0000"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+<!--            &lt;!&ndash; 副标题 &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Track expenses"-->
+<!--                android:textSize="18sp"-->
+<!--                android:layout_marginBottom="16dp" />-->
 
             <View
                 android:layout_width="match_parent"

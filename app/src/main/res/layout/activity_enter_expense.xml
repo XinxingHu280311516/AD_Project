@@ -19,20 +19,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ExpenseTrack"
+            android:text="SmartBook"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:drawableLeft="@drawable/image11"
             android:drawablePadding="8dp" />
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/back_button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/image10"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:contentDescription="Logout" />
+            android:contentDescription="Return" />
     </RelativeLayout>
 
     <ScrollView

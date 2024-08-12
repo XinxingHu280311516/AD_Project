@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ExpenseTracker"
+            android:text="SmartBook"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
@@ -53,12 +53,12 @@
             android:background="@color/white_color"
             android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Forgot your password?"
-            android:textColor="@color/red_color"
-            android:layout_marginBottom="16dp" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Forgot your password?"-->
+<!--            android:textColor="@color/red_color"-->
+<!--            android:layout_marginBottom="16dp" />-->
 
         <Button
             android:id="@+id/sign_in_button"
@@ -69,30 +69,30 @@
             android:textColor="@color/white_color"
             android:layout_marginBottom="16dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center">-->
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Facebook"
-                android:backgroundTint="@color/red_color"
-                android:textColor="@color/white_color"
-                android:layout_marginEnd="8dp" />
+<!--            <Button-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Facebook"-->
+<!--                android:backgroundTint="@color/red_color"-->
+<!--                android:textColor="@color/white_color"-->
+<!--                android:layout_marginEnd="8dp" />-->
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Google"
-                android:backgroundTint="@color/red_color"
-                android:textColor="@color/white_color"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
+<!--            <Button-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Google"-->
+<!--                android:backgroundTint="@color/red_color"-->
+<!--                android:textColor="@color/white_color"-->
+<!--                android:layout_marginStart="8dp" />-->
+<!--        </LinearLayout>-->
 
         <TextView
             android:layout_width="wrap_content"
