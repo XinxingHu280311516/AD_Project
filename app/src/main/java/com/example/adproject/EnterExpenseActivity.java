@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,6 +74,8 @@ public class EnterExpenseActivity extends AppCompatActivity {
             // 动态加载用户类别
             loadUserCategories(category);
 
+            System.out.println(date);
+
             // 设置dateSpinner的选择
             ArrayAdapter<String> dateAdapter = (ArrayAdapter<String>) dateSpinner.getAdapter();
             if (date != null) {
@@ -84,7 +87,7 @@ public class EnterExpenseActivity extends AppCompatActivity {
         saveExpenseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveExpense();
+                checkAndSaveExpense();
             }
         });
     }
@@ -215,5 +218,55 @@ public class EnterExpenseActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void checkAndSaveExpense() {
+        String amount = amountEditText.getText().toString().trim();
+        Category category = (Category) categorySpinner.getSelectedItem();
+        String date = dateSpinner.getSelectedItem().toString().split("T")[0];
+        String notes = notesEditText.getText().toString().trim();
+
+        if (amount.isEmpty() || category == null || date.isEmpty()) {
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double enteredAmount = Double.parseDouble(amount);
+
+        // 获取当前类别的预算和实际支出
+        Call<List<Map<String, Object>>> call = apiService.getTotalSpendingByCategoryForCurrentMonth(userId);
+        call.enqueue(new Callback<List<Map<String, Object>>>() {
+            @Override
+            public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Map<String, Object>> categorySpendings = response.body();
+                    double totalSpending = 0;
+                    double budget = category.getBudget();
+
+                    for (Map<String, Object> spending : categorySpendings) {
+                        Number categoryIdNumber = (Number) spending.get("categoryId");
+                        if (categoryIdNumber != null && categoryIdNumber.intValue() == category.getId()) {
+                            totalSpending = ((Number) spending.get("totalSpending")).doubleValue();
+                            break;
+                        }
+                    }
+
+                    // 检查是否超出预算
+                    if ((totalSpending + enteredAmount) > budget) {
+                        Toast.makeText(EnterExpenseActivity.this, "This transaction exceeds the budget for " + category.getName(), Toast.LENGTH_LONG).show();
+                        saveExpense();
+                    } else {
+                        saveExpense();
+                    }
+                } else {
+                    Toast.makeText(EnterExpenseActivity.this, "Failed to check budget", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
+                Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
