@@ -1,9 +1,12 @@
 package com.example.adproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +56,15 @@ public class DashboardActivity extends AppCompatActivity {
         budgetProgressPercentage = findViewById(R.id.budget_progress_percentage);
 
         pieChart = findViewById(R.id.pie_chart);
+
+        ImageButton backButton = findViewById(R.id.back_button2);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
         //setupPieChart();
         topExpensesTitle1 = findViewById(R.id.top_expenses_title_1);
         topExpensesTitle2 = findViewById(R.id.top_expenses_title_2);

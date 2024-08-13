@@ -1,7 +1,12 @@
 package com.example.adproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +21,13 @@ import java.util.Map;
 public class PersonalizedRecommendationsActivity extends AppCompatActivity {
 
     private TextView spendingOverviewText;
-    private TextView budgetAdjustmentText;
-    private TextView savingsTipsText;
+    //private TextView budgetAdjustmentText;
+    //private TextView savingsTipsText;
+
+    private Button budgetAdjustmentButton;
+    private Button savingsTipsButton;
+
+    private RelativeLayout loadingLayout;
 
     private ApiService apiService;
     private Integer userId;
@@ -28,8 +38,24 @@ public class PersonalizedRecommendationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personalized_recommendations);
 
         spendingOverviewText = findViewById(R.id.spending_overview_text);
-        budgetAdjustmentText = findViewById(R.id.budget_adjustment_text);
-        savingsTipsText = findViewById(R.id.savings_tips_text);
+        //budgetAdjustmentText = findViewById(R.id.budget_adjustment_text);
+        //savingsTipsText = findViewById(R.id.savings_tips_text);
+
+        budgetAdjustmentButton = findViewById(R.id.budget_adjustment_button);
+        savingsTipsButton = findViewById(R.id.savings_tips_button);
+
+        loadingLayout = findViewById(R.id.loading_layout);
+
+        ImageButton backButton = findViewById(R.id.back_button6);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalizedRecommendationsActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        showLoading();
 
         apiService = ApiClient.getApiService();
 
@@ -42,6 +68,7 @@ public class PersonalizedRecommendationsActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Map<String, String>>>() {
             @Override
             public void onResponse(Call<List<Map<String, String>>> call, Response<List<Map<String, String>>> response) {
+                hideLoading();
                 if (response.isSuccessful() && response.body() != null) {
                     List<Map<String, String>> tips = response.body();  // 直接获取响应内容
                     updateUI(tips); // 更新 UI 显示
@@ -57,7 +84,34 @@ public class PersonalizedRecommendationsActivity extends AppCompatActivity {
                 spendingOverviewText.setText("Network error: " + t.getMessage());
             }
         });
+
+        budgetAdjustmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalizedRecommendationsActivity.this, BudgetAdjustmentActivity.class);
+                intent.putExtra("details", budgetAdjustmentButton.getTag().toString());
+                startActivity(intent);
+            }
+        });
+
+        savingsTipsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalizedRecommendationsActivity.this, SavingsTipsActivity.class);
+                intent.putExtra("details", savingsTipsButton.getTag().toString());
+                startActivity(intent);
+            }
+        });
     }
+
+    private void showLoading() {
+        loadingLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading() {
+        loadingLayout.setVisibility(View.GONE);
+    }
+
 
     private void updateUI(List<Map<String, String>> tips) {
         for (Map<String, String> tip : tips) {
@@ -65,11 +119,12 @@ public class PersonalizedRecommendationsActivity extends AppCompatActivity {
             String value = tip.get("value");
 
             if ("Spending Overview".equals(name)) {
-                spendingOverviewText.setText(value);
+                String processedText = value.replaceAll("#", "").replaceAll("\\*", "");
+                spendingOverviewText.setText(processedText);
             } else if ("Budget Adjustment Suggestions".equals(name)) {
-                budgetAdjustmentText.setText(value);
+                budgetAdjustmentButton.setTag(value);  // 将内容存储在按钮的Tag中
             } else if ("Savings Tips".equals(name)) {
-                savingsTipsText.setText(value);
+                savingsTipsButton.setTag(value);  // 将内容存储在按钮的Tag中
             }
         }
     }

@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,14 @@ public class EnterExpenseActivity extends AppCompatActivity {
         dateSpinner = findViewById(R.id.date_spinner);
         notesEditText = findViewById(R.id.notes_edit_text);
         saveExpenseButton = findViewById(R.id.save_expense_button);
+        ImageButton backButton = findViewById(R.id.back_button3);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EnterExpenseActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
         apiService = ApiClient.getApiService();
 
         // 初始化日期下拉框
@@ -80,39 +89,6 @@ public class EnterExpenseActivity extends AppCompatActivity {
         });
     }
 
-//    private void loadUserCategories(String selectedCategory) {
-//        Call<List<Category>> call = apiService.getUserCategories(userId);
-//        call.enqueue(new Callback<List<Category>>() {
-//            @Override
-//            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-//                if (response.isSuccessful()) {
-//                    List<Category> categories = response.body();
-//                    System.out.println(categories);
-//                    if (categories != null) {
-//                        List<String> categoryNames = new ArrayList<>();
-//                        for (Category category : categories) {
-//                            categoryNames.add(category.getName());
-//                        }
-//                        ArrayAdapter<String> adapter = new ArrayAdapter<>(EnterExpenseActivity.this, android.R.layout.simple_spinner_item, categoryNames);
-//                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                        categorySpinner.setAdapter(adapter);
-//
-//                        if (selectedCategory != null) {
-//                            int spinnerPosition = adapter.getPosition(selectedCategory);
-//                            categorySpinner.setSelection(spinnerPosition);
-//                        }
-//                    }
-//                } else {
-//                    Toast.makeText(EnterExpenseActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Category>> call, Throwable t) {
-//                Toast.makeText(EnterExpenseActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
     private void loadUserCategories(String selectedCategoryName) {
         Call<List<Category>> call = apiService.getUserCategories(userId);

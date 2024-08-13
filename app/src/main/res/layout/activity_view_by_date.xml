@@ -22,14 +22,14 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/logout_button"
+        <ImageButton
+            android:id="@+id/back_button5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/image10"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Return" />
     </RelativeLayout>
 
     <!-- 日期选择器 和 查找按钮 -->

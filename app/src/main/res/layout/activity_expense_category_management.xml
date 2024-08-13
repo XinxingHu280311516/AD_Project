@@ -20,6 +20,15 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/back_button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image10"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Return" />
     </RelativeLayout>
 
     <!-- 内容区 -->
@@ -100,33 +109,33 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 底部导航栏 -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/red_color"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+<!--    &lt;!&ndash; 底部导航栏 &ndash;&gt;-->
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="56dp"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:background="@color/red_color"-->
+<!--        android:padding="16dp"-->
+<!--        android:gravity="center_vertical">-->
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="32dp"
-            android:src="@drawable/home"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="16dp" />
+<!--        <ImageView-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:src="@drawable/home"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_marginEnd="16dp" />-->
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/chart"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="16dp" />
+<!--        <ImageView-->
+<!--            android:layout_width="32dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:src="@drawable/chart"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_marginEnd="16dp" />-->
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="32dp"
-            android:src="@drawable/settings"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+<!--        <ImageView-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:src="@drawable/settings"-->
+<!--            android:layout_alignParentEnd="true" />-->
+<!--    </RelativeLayout>-->
 </RelativeLayout>

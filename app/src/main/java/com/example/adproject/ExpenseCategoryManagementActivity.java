@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,15 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.save_button);
         categoriesList = findViewById(R.id.categories_list);
         apiService = ApiClient.getApiService();
+
+        ImageButton backButton = findViewById(R.id.back_button4);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExpenseCategoryManagementActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Retrieve userId from Intent or SharedPreferences
         SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);

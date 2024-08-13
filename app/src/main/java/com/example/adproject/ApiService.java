@@ -19,6 +19,9 @@ public interface ApiService {
     @POST("api/login")
     Call<User> login(@Body User user);
 
+    @POST("/api/logout")
+    Call<Void> logout();
+
     @POST("api/register")
     Call<String> register(@Body User user);
 

@@ -1,9 +1,13 @@
 package com.example.adproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +33,7 @@ public class ExpenseReportActivity extends AppCompatActivity {
     private ApiService apiService;
     private Integer userId;
     private TextView totalExpensesAmount;
+    private ImageButton backButton;
     private List<Category> categories = new ArrayList<>();
 
     @Override
@@ -40,6 +45,15 @@ public class ExpenseReportActivity extends AppCompatActivity {
         recentExpensesRecyclerView = findViewById(R.id.recent_expenses_recyclerview);
 
         totalExpensesAmount = findViewById(R.id.total_expenses_amount);
+
+        backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExpenseReportActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         apiService = ApiClient.getApiService();
 

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".PersonalizedRecommendationsActivity">
+    android:background="#FFFFFF">
 
     <!-- 标题栏 -->
     <RelativeLayout
@@ -27,15 +22,6 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/back_button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/image10"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="Return" />
     </RelativeLayout>
 
     <ScrollView
@@ -73,7 +59,7 @@
                 android:id="@+id/spending_overview_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Spending Overview"
+                android:text="Budget Adjustment"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -86,7 +72,7 @@
                 android:layout_marginBottom="16dp">
 
                 <TextView
-                    android:id="@+id/spending_overview_text"
+                    android:id="@+id/details_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Your spending has increased by 15% this month compared to last month. Consider setting a stricter budget for dining out."
@@ -95,56 +81,56 @@
             </RelativeLayout>
 
             <!-- Budget Adjustment -->
-            <Button
-                android:id="@+id/budget_adjustment_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Budget Adjustment"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
+<!--            <Button-->
+<!--                android:id="@+id/budget_adjustment_button"-->
+<!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/rounded_background"-->
-<!--                android:padding="16dp"-->
-<!--                android:layout_marginBottom="16dp">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/budget_adjustment_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text=""-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:textColor="#888888" />-->
-<!--            </RelativeLayout>-->
-
-            <!-- Savings Tips -->
-            <Button
-                android:id="@+id/savings_tips_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Savings Tips"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+<!--                android:text="Budget Adjustment"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_marginBottom="8dp" />-->
 
             <!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/rounded_background"-->
-<!--                android:padding="16dp"-->
-<!--                android:layout_marginBottom="16dp">-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/rounded_background"-->
+            <!--                android:padding="16dp"-->
+            <!--                android:layout_marginBottom="16dp">-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/savings_tips_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text=""-->
-<!--                    android:textSize="14sp"-->
-<!--                    android:textColor="#888888" />-->
-<!--            </RelativeLayout>-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/budget_adjustment_text"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text=""-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    android:textColor="#888888" />-->
+            <!--            </RelativeLayout>-->
+
+            <!-- Savings Tips -->
+<!--            <Button-->
+<!--                android:id="@+id/savings_tips_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:text="Savings Tips"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textStyle="bold" />-->
+
+            <!--            <RelativeLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/rounded_background"-->
+            <!--                android:padding="16dp"-->
+            <!--                android:layout_marginBottom="16dp">-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/savings_tips_text"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text=""-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    android:textColor="#888888" />-->
+            <!--            </RelativeLayout>-->
         </LinearLayout>
     </ScrollView>
 
@@ -158,35 +144,4 @@
         android:gravity="center_vertical"
         android:padding="16dp">
     </RelativeLayout>
-
-
-
 </RelativeLayout>
-
-    <!-- 加载界面 -->
-    <RelativeLayout
-        android:id="@+id/loading_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:gravity="center"
-        android:background="#FFFFFF">
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-
-        <TextView
-            android:id="@+id/loading_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Loading..."
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:layout_below="@id/progress_bar"
-            android:layout_marginTop="16dp" />
-
-    </RelativeLayout>
-</FrameLayout>
