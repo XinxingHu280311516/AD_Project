@@ -62,10 +62,10 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/summary_pie_chart"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bar_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
                     android:layout_below="@id/expenditure_summary_title"
                     android:layout_marginTop="16dp"
                     android:layout_centerHorizontal="true" />
@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total Expenses"
-                    android:layout_below="@id/summary_pie_chart"
+                    android:layout_below="@id/bar_chart"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
                     android:textSize="14sp"
