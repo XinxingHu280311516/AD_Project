@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://10.249.10.150:8080/";
+    private static final String BASE_URL = "http://192.168.0.103:8080/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofitInstance() {

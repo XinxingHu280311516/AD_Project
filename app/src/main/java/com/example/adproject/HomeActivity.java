@@ -41,15 +41,12 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("userId", MODE_PRIVATE);
         userId = pref.getInt("UserId", -1);
 
-        saveCategoryImagePath("Food","D:\\Android\\AndroidStudioProjects\\app\\src\\main\\res\\drawable\\image6.png");
-        saveCategoryImagePath("Drinking","D:\\Android\\AndroidStudioProjects\\app\\src\\main\\res\\drawable\\image7.png");
-        saveCategoryImagePath("House","D:\\Android\\AndroidStudioProjects\\app\\src\\main\\res\\drawable\\image8.png");
+        saveCategoryImagePath("Food", R.drawable.image6);
+        saveCategoryImagePath("Drinking", R.drawable.image7);
+        saveCategoryImagePath("House", R.drawable.image8);
 
         allCategories = new ArrayList<>();
         loadAllCategories();
-
-
-
 
 
         Button logoutButton = findViewById(R.id.logout_button);
@@ -198,39 +195,33 @@ public class HomeActivity extends AppCompatActivity {
 
     private void loadCategoryImages(List<Category> categories) {
         LinearLayout categoryContainer = findViewById(R.id.category_container);
-
-        // 获取 SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("category_images", MODE_PRIVATE);
 
         for (Category category : categories) {
-            // 获取存储的图片路径
-            String imagePath = sharedPreferences.getString("category_image_" + category.getName(), null);
-            if (imagePath != null) {
+            int imageResId = sharedPreferences.getInt("category_image_" + category.getName(), -1);
+            if (imageResId != -1) {
                 // 创建 ImageView 并设置图片
                 ImageView imageView = new ImageView(this);
-                imageView.setLayoutParams(new LinearLayout.LayoutParams(128, 128));
+                imageView.setLayoutParams(new LinearLayout.LayoutParams(256, 256));
                 imageView.setPadding(8, 0, 8, 0);
 
-                // 加载图片
-                Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-                //System.out.println(imagePath);
-                imageView.setImageBitmap(bitmap);
+                // 设置图片
+                imageView.setImageResource(imageResId);
 
                 // 添加到 LinearLayout 中
                 categoryContainer.addView(imageView);
             }
-            else{
-                //System.out.println(111);
-            }
         }
     }
 
-    private void saveCategoryImagePath(String categoryName, String imagePath) {
+
+    private void saveCategoryImagePath(String categoryName, int resourceId) {
         SharedPreferences sharedPreferences = getSharedPreferences("category_images", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("category_image_" + categoryName, imagePath);
+        editor.putInt("category_image_" + categoryName, resourceId);
         editor.apply();
     }
+
 
     private void loadAllCategories() {
         // Load user categories
