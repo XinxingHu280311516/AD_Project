@@ -150,8 +150,13 @@ public class TextRecognitionActivity extends AppCompatActivity {
 
 
     private String extractDate(String text) {
-        // 匹配日期部分，支持 d/M/yyyy, dd/MM/yyyy, yyyy/M/d, yyyy/MM/dd 等格式
-        Pattern datePattern = Pattern.compile("\\d{1,2}[-/]\\d{1,2}[-/]\\d{4}|\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}");
+        // 匹配日期部分，支持 d/M/yyyy, dd/MM/yyyy, yyyy/M/d, yyyy/MM/dd, d MMM yyyy, yyyy MMM d 等格式
+        Pattern datePattern = Pattern.compile(
+                "\\d{1,2}[-/]\\d{1,2}[-/]\\d{4}|" +    // d/M/yyyy or dd/MM/yyyy
+                        "\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}|" +    // yyyy/M/d or yyyy/MM/dd
+                        "\\d{1,2}\\s+\\w{3,9}\\s+\\d{4}|" +    // d MMM yyyy (e.g., 14 Aug 2024)
+                        "\\d{4}\\s+\\w{3,9}\\s+\\d{1,2}"       // yyyy MMM d (e.g., 2024 Aug 14)
+        );
         Matcher dateMatcher = datePattern.matcher(text);
 
         if (dateMatcher.find()) {
@@ -166,7 +171,7 @@ public class TextRecognitionActivity extends AppCompatActivity {
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date;
 
-        // 使用 DateTimeFormatterBuilder 来构建灵活的解析器，支持可选的前导零
+        // 使用 DateTimeFormatterBuilder 来构建灵活的解析器，支持多种日期格式
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                 .appendOptional(DateTimeFormatter.ofPattern("yyyy/M/d"))
                 .appendOptional(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
@@ -176,6 +181,8 @@ public class TextRecognitionActivity extends AppCompatActivity {
                 .appendOptional(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 .appendOptional(DateTimeFormatter.ofPattern("d-M-yyyy"))
                 .appendOptional(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("d MMM yyyy"))
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy MMM d"))
                 .toFormatter();
 
         // 解析日期
@@ -188,6 +195,7 @@ public class TextRecognitionActivity extends AppCompatActivity {
         // 将 LocalDate 对象格式化为所需的 dd-MM-yyyy 格式
         return date.format(outputFormatter);
     }
+
 
 
 

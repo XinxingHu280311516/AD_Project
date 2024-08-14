@@ -81,16 +81,37 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
     }
 
     private void loadCategories() {
-//        Call<List<Category>> call = apiService.getUserCategories(userId);
-//        call.enqueue(new Callback<List<Category>>() {
+        Call<List<Category>> call = apiService.getUserCategories(userId);
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                System.out.println(response);
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Category category : response.body()) {
+                        addCategoryToList(category);
+                    }
+                } else {
+                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Load system categories
+//        Call<List<Category>> systemCategoriesCall = apiService.getCategoriesByType(0);
+//        systemCategoriesCall.enqueue(new Callback<List<Category>>() {
 //            @Override
 //            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
 //                if (response.isSuccessful() && response.body() != null) {
-//                    for (Category category : response.body()) {
-//                        addCategoryToList(category);
+//                    for (Category systemCategory : response.body()) {
+//                        copySystemCategoryToUser(systemCategory);
 //                    }
 //                } else {
-//                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load system categories", Toast.LENGTH_SHORT).show();
 //                }
 //            }
 //
@@ -99,74 +120,54 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
 //                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
 //            }
 //        });
+    }
+
+//    private void copySystemCategoryToUser(Category systemCategory) {
+//        Call<List<Category>> userCategoriesCall = apiService.getUserCategories(userId);
+//        userCategoriesCall.enqueue(new Callback<List<Category>>() {
+//            @Override
+//            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    boolean categoryExists = false;
+//                    for (Category userCategory : response.body()) {
+//                        if (userCategory.getName().equals(systemCategory.getName())) {
+//                            categoryExists = true;
+//                            break;
+//                        }
+//                    }
+//                    if (!categoryExists) {
+//                        Category newCategory = new Category();
+//                        newCategory.setName(systemCategory.getName());
+//                        newCategory.setBudget(systemCategory.getBudget());
+//                        newCategory.setUser(new User(userId));
+//                        newCategory.setType(1); // Set type to 1 for user category
 //
-        // Load system categories
-        Call<List<Category>> systemCategoriesCall = apiService.getCategoriesByType(0);
-        systemCategoriesCall.enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    for (Category systemCategory : response.body()) {
-                        copySystemCategoryToUser(systemCategory);
-                    }
-                } else {
-                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to load system categories", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void copySystemCategoryToUser(Category systemCategory) {
-        Call<List<Category>> userCategoriesCall = apiService.getUserCategories(userId);
-        userCategoriesCall.enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    boolean categoryExists = false;
-                    for (Category userCategory : response.body()) {
-                        if (userCategory.getName().equals(systemCategory.getName())) {
-                            categoryExists = true;
-                            break;
-                        }
-                    }
-                    if (!categoryExists) {
-                        Category newCategory = new Category();
-                        newCategory.setName(systemCategory.getName());
-                        newCategory.setBudget(systemCategory.getBudget());
-                        newCategory.setUser(new User(userId));
-                        newCategory.setType(1); // Set type to 1 for user category
-
-                        Call<Category> callAddCategory = apiService.addCategory(newCategory, userId);
-                        callAddCategory.enqueue(new Callback<Category>() {
-                            @Override
-                            public void onResponse(Call<Category> call, Response<Category> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    addCategoryToList(response.body());
-                                } else {
-                                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to add system category to user categories", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Category> call, Throwable t) {
-                                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//                        Call<Category> callAddCategory = apiService.addCategory(newCategory, userId);
+//                        callAddCategory.enqueue(new Callback<Category>() {
+//                            @Override
+//                            public void onResponse(Call<Category> call, Response<Category> response) {
+//                                if (response.isSuccessful() && response.body() != null) {
+//                                    addCategoryToList(response.body());
+//                                } else {
+//                                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to add system category to user categories", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<Category> call, Throwable t) {
+//                                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Category>> call, Throwable t) {
+//                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void addCategory(String categoryName, String amount) {
         Category category = new Category();
@@ -225,7 +226,7 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog(category, categoryNameTextView, amountTextView);
+                showEditDialog(category, categoryNameTextView, amountTextView, newCategoryItem);
             }
         });
 
@@ -270,7 +271,7 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
         });
     }
 
-    private void showEditDialog(Category category, final TextView categoryNameTextView, final TextView amountTextView) {
+    private void showEditDialog(Category category, final TextView categoryNameTextView, final TextView amountTextView, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit Category");
 
@@ -293,7 +294,11 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
                     category.setName(newCategoryName);
                     category.setBudget(Double.parseDouble(newAmount));
 
-                    updateCategory(category, categoryNameTextView, amountTextView);
+                    //addCategory(newCategoryName,newAmount);
+                    delete1Category(category,categoryNameTextView,amountTextView,newCategoryName,newAmount);
+
+                    categoriesList.removeView(view);
+                    //updateCategory(category, categoryNameTextView, amountTextView);
                 } else {
                     Toast.makeText(ExpenseCategoryManagementActivity.this, "Please fill in both fields", Toast.LENGTH_SHORT).show();
                 }
@@ -305,23 +310,50 @@ public class ExpenseCategoryManagementActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void updateCategory(Category category, final TextView categoryNameTextView, final TextView amountTextView) {
-        Call<Category> call = apiService.updateCategory(category, category.getId());
-        call.enqueue(new Callback<Category>() {
+//    private void updateCategory(Category category, final TextView categoryNameTextView, final TextView amountTextView) {
+//        Call<Category> call = apiService.updateCategory(category, category.getId());
+//        call.enqueue(new Callback<Category>() {
+//            @Override
+//            public void onResponse(Call<Category> call, Response<Category> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    categoryNameTextView.setText(response.body().getName());
+//                    amountTextView.setText("$" + response.body().getBudget());
+//                } else {
+//                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to update category", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Category> call, Throwable t) {
+//                Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
+    private void delete1Category(Category category, final TextView categoryNameTextView, final TextView amountTextView, String n, String b) {
+        Call<Void> call = apiService.deleteCategory(category.getId());
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Category> call, Response<Category> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    categoryNameTextView.setText(response.body().getName());
-                    amountTextView.setText("$" + response.body().getBudget());
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    categoryNameTextView.setText(n);
+                    amountTextView.setText("$" + b);
+                    //categoriesList.removeView();
+                    addCategory(n,b);
+
+
+
+                    //categoriesList.removeView(view);
                 } else {
-                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to update category", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ExpenseCategoryManagementActivity.this, "Failed to delete category", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Category> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(ExpenseCategoryManagementActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

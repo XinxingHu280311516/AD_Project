@@ -116,6 +116,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    // 获取并存储Session ID
+                    String sessionId = null;
+                    for (String cookie : response.headers().values("Set-Cookie")) {
+                        if (cookie.startsWith("user_session")) {
+                            sessionId = cookie.split(";")[0]; // 获取user_session的值
+                            break;
+                        }
+                    }
+
+                    if (sessionId != null) {
+                        SharedPreferences pref = getSharedPreferences("user_session", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("user_session", sessionId);
+                        editor.apply();
+                    }
+
                     User loggedInUser = response.body();
                     userId = loggedInUser.getId();
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
